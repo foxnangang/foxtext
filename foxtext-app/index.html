@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy"
+      content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self'; connect-src 'none'; form-action 'none'; base-uri 'none'; object-src 'none'">
+<title>FoxText — Markdown Editor</title>
+<link rel="stylesheet" href="assets/css/app.css">
+</head>
+<body>
+
+<!-- ===================== icon sprite (inline, no network) ===================== -->
+<svg class="sprite" aria-hidden="true" focusable="false" width="0" height="0">
+  <defs>
+    <symbol id="i-sidebar" viewBox="0 0 20 20"><rect x="2.75" y="3.75" width="14.5" height="12.5" rx="2.5"/><path d="M8 3.75v12.5"/></symbol>
+    <symbol id="i-new" viewBox="0 0 20 20"><path d="M4.5 2.75h6L15.5 7.5v9.75h-11z"/><path d="M10.25 2.9v4.6h4.6"/><path d="M10 10.2v4.2M7.9 12.3h4.2"/></symbol>
+    <symbol id="i-open" viewBox="0 0 20 20"><path d="M2.75 6.2h5.1l1.7 2.1h7.7v6.9a1.6 1.6 0 0 1-1.6 1.6H4.35a1.6 1.6 0 0 1-1.6-1.6z"/><path d="M2.75 8.3h14.5"/></symbol>
+    <symbol id="i-save" viewBox="0 0 20 20"><path d="M3.75 4.75h9.4l3.1 3.1v7.4h-12.5z"/><path d="M6.75 4.75v4.2h5.5V4.75"/><path d="M6.75 15.25v-3.9h6.5v3.9"/></symbol>
+    <symbol id="i-saveas" viewBox="0 0 20 20"><path d="M3 4.4h8.2l2.8 2.8v4.1"/><path d="M3 4.4v11.2h5"/><path d="M11.4 16.2l4.6-4.6 1.6 1.6-4.6 4.6h-1.6z"/></symbol>
+    <symbol id="i-export" viewBox="0 0 20 20"><path d="M10 2.9v9.2"/><path d="M6.5 8.8 10 12.3l3.5-3.5"/><path d="M3.6 13.2v2.4a1.6 1.6 0 0 0 1.6 1.6h9.6a1.6 1.6 0 0 0 1.6-1.6v-2.4"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 20 20"><circle cx="10" cy="10" r="3.5"/><path d="M10 2.2v2M10 15.8v2M2.2 10h2M15.8 10h2M4.4 4.4l1.4 1.4M14.2 14.2l1.4 1.4M15.6 4.4l-1.4 1.4M5.8 14.2l-1.4 1.4"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 20 20"><path d="M15.2 12.4A5.9 5.9 0 0 1 7.6 4.8a6.1 6.1 0 1 0 7.6 7.6z"/></symbol>
+    <symbol id="i-focus" viewBox="0 0 20 20"><path d="M3.6 7.4V4.6a1 1 0 0 1 1-1h2.8M16.4 7.4V4.6a1 1 0 0 0-1-1h-2.8M3.6 12.6v2.8a1 1 0 0 0 1 1h2.8M16.4 12.6v2.8a1 1 0 0 1-1 1h-2.8"/></symbol>
+    <symbol id="i-bold" viewBox="0 0 20 20"><path d="M6.4 3.9h4.4a3 3 0 0 1 0 6h-4.4z"/><path d="M6.4 9.9h4.9a3.1 3.1 0 0 1 0 6.2H6.4z"/></symbol>
+    <symbol id="i-italic" viewBox="0 0 20 20"><path d="M12.4 3.9H7.6M12.4 16.1H7.6M11.4 3.9 8.6 16.1"/></symbol>
+    <symbol id="i-link" viewBox="0 0 20 20"><path d="M8.4 11.6a2.9 2.9 0 0 0 4.1 0l2.3-2.3a2.9 2.9 0 0 0-4.1-4.1l-1 1"/><path d="M11.6 8.4a2.9 2.9 0 0 0-4.1 0l-2.3 2.3a2.9 2.9 0 0 0 4.1 4.1l1-1"/></symbol>
+    <symbol id="i-code" viewBox="0 0 20 20"><path d="M7.4 6.6 4 10l3.4 3.4M12.6 6.6 16 10l-3.4 3.4"/></symbol>
+    <symbol id="i-close" viewBox="0 0 20 20"><path d="M5.4 5.4l9.2 9.2M14.6 5.4l-9.2 9.2"/></symbol>
+    <symbol id="i-settings" viewBox="0 0 20 20"><circle cx="10" cy="10" r="2.55"/><path d="M10 2.3v2.2M10 15.5v2.2M4.2 4.2l1.55 1.55M14.25 14.25l1.55 1.55M2.3 10h2.2M15.5 10h2.2M4.2 15.8l1.55-1.55M14.25 5.75l1.55-1.55"/></symbol>
+    <symbol id="i-check" viewBox="0 0 20 20"><path d="M4.8 10.5l3.3 3.3 7.1-7.5"/></symbol>
+  </defs>
+</svg>
+
+<div class="app" id="app">
+
+  <!-- ============================== menu bar =============================
+       The renderer draws this menu bar itself. It is shown in FoxText Lite
+       (a bare WebView2 window without any native menu) and in a plain
+       browser, and stays hidden in Electron, which already has a real
+       native menu bar — a second one would just be a duplicate.
+       `window.__foxtextHost` is set by the host before any page script
+       runs; Electron sets it to "electron". `hidden` is authoritative
+       thanks to the global `[hidden] { display: none !important }` rule. -->
+  <div class="menubar" id="menubar" role="menubar" data-i18n-aria="menu.aria" hidden>
+    <div class="mb-scroll" id="mbScroll">
+      <button type="button" class="mb-item" data-menu="file" aria-haspopup="true" aria-expanded="false"><span data-i18n="menu.file">文件</span></button>
+      <button type="button" class="mb-item" data-menu="edit" aria-haspopup="true" aria-expanded="false"><span data-i18n="menu.edit">编辑</span></button>
+      <button type="button" class="mb-item" data-menu="view" aria-haspopup="true" aria-expanded="false"><span data-i18n="menu.view">视图</span></button>
+      <button type="button" class="mb-item" data-menu="help" aria-haspopup="true" aria-expanded="false"><span data-i18n="menu.help">帮助</span></button>
+    </div>
+    <!-- lives outside .mb-scroll: that row can scroll on narrow windows and
+         would otherwise clip the dropdown -->
+    <div class="mb-drop" id="mbDrop" role="menu" hidden></div>
+  </div>
+
+  <!-- ============================== top bar ============================== -->
+  <header class="topbar">
+    <div class="tb-brand">
+      <span class="logo" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="20" height="20"><path d="M4 4h9l5 5v11H4z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M8 12.4h5M8 15.6h3.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </span>
+      <span class="brand-name">FoxText</span>
+      <span class="brand-badge" data-i18n="app.badge">编辑器</span>
+    </div>
+
+    <div class="tb-doc">
+      <span class="doc-name" id="docName">—</span>
+      <span class="doc-dot" id="docDot" title="" hidden>●</span>
+    </div>
+
+    <div class="tb-view">
+      <div class="segmented" id="viewGroup" role="group" data-i18n-aria="view.aria">
+        <button type="button" class="seg" data-view="edit" data-i18n="view.edit">编辑</button>
+        <button type="button" class="seg is-active" data-view="split" data-i18n="view.split">分栏</button>
+        <button type="button" class="seg" data-view="preview" data-i18n="view.preview">预览</button>
+      </div>
+    </div>
+
+    <div class="tb-actions">
+      <div class="btn-group" role="group">
+        <button type="button" class="icon-btn" id="btnBold" data-i18n-title="tb.bold" data-i18n-aria="tb.bold"><svg class="ic" width="18" height="18"><use href="#i-bold"/></svg></button>
+        <button type="button" class="icon-btn" id="btnItalic" data-i18n-title="tb.italic" data-i18n-aria="tb.italic"><svg class="ic" width="18" height="18"><use href="#i-italic"/></svg></button>
+        <button type="button" class="icon-btn" id="btnLink" data-i18n-title="tb.link" data-i18n-aria="tb.link"><svg class="ic" width="18" height="18"><use href="#i-link"/></svg></button>
+        <button type="button" class="icon-btn" id="btnInlineCode" data-i18n-title="tb.code" data-i18n-aria="tb.code"><svg class="ic" width="18" height="18"><use href="#i-code"/></svg></button>
+      </div>
+
+      <span class="tb-divider" aria-hidden="true"></span>
+
+      <div class="btn-group" role="group">
+        <button type="button" class="icon-btn" id="btnNew" data-i18n-title="tb.new" data-i18n-aria="tb.new"><svg class="ic" width="18" height="18"><use href="#i-new"/></svg></button>
+        <button type="button" class="icon-btn" id="btnOpen" data-i18n-title="tb.open" data-i18n-aria="tb.open"><svg class="ic" width="18" height="18"><use href="#i-open"/></svg></button>
+        <button type="button" class="icon-btn" id="btnSave" data-i18n-title="tb.save" data-i18n-aria="tb.save"><svg class="ic" width="18" height="18"><use href="#i-save"/></svg></button>
+        <button type="button" class="icon-btn" id="btnSaveAs" data-i18n-title="tb.saveAs" data-i18n-aria="tb.saveAs"><svg class="ic" width="18" height="18"><use href="#i-saveas"/></svg></button>
+        <div class="dropdown" id="exportWrap">
+          <button type="button" class="icon-btn" id="btnExport" data-i18n-title="tb.export" data-i18n-aria="tb.export" aria-haspopup="true" aria-expanded="false"><svg class="ic" width="18" height="18"><use href="#i-export"/></svg></button>
+          <div class="menu" id="exportMenu" role="menu" hidden>
+            <button type="button" class="menu-item" role="menuitem" data-export="html" data-i18n="tb.exportHtml">导出 HTML</button>
+            <button type="button" class="menu-item" role="menuitem" data-export="txt" data-i18n="tb.exportTxt">导出纯文本</button>
+            <button type="button" class="menu-item" role="menuitem" data-export="md" data-i18n="tb.exportMd">导出 Markdown</button>
+          </div>
+        </div>
+      </div>
+
+      <span class="tb-divider" aria-hidden="true"></span>
+
+      <div class="btn-group" role="group">
+        <button type="button" class="icon-btn" id="btnSidebar" data-i18n-title="tb.sidebar" data-i18n-aria="tb.sidebar"><svg class="ic" width="18" height="18"><use href="#i-sidebar"/></svg></button>
+        <button type="button" class="icon-btn" id="btnFocus" data-i18n-title="tb.focus" data-i18n-aria="tb.focus"><svg class="ic" width="18" height="18"><use href="#i-focus"/></svg></button>
+        <button type="button" class="icon-btn" id="btnTheme" data-i18n-title="tb.themeToLight" data-i18n-aria="tb.theme"><svg class="ic" width="18" height="18"><use href="#i-sun" id="themeIcon"/></svg></button>
+        <div class="dropdown" id="settingsWrap">
+          <button type="button" class="icon-btn" id="btnSettings" data-i18n-title="set.aria" data-i18n-aria="set.aria"
+                  aria-haspopup="true" aria-expanded="false"><svg class="ic" width="18" height="18"><use href="#i-settings"/></svg></button>
+          <div class="menu menu-settings" id="settingsMenu" role="menu" hidden>
+            <button type="button" class="menu-item menu-check" role="menuitemcheckbox" id="miStats" aria-checked="true">
+              <svg class="ic ic-check" width="16" height="16" aria-hidden="true"><use href="#i-check"/></svg>
+              <span data-i18n="set.stats">匿名使用统计</span>
+            </button>
+            <p class="menu-note" data-i18n="set.statsHint">仅上报版本号、系统和界面语言，不含文档内容。</p>
+            <p class="menu-note menu-note-ver" id="miVersion">—</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============================== draft banner ============================== -->
+  <div class="banner" id="draftBanner" hidden>
+    <span class="banner-text" id="draftMsg"></span>
+    <span class="banner-actions">
+      <button type="button" class="btn btn-accent btn-sm" id="btnRestore" data-i18n="doc.restore">恢复</button>
+      <button type="button" class="btn btn-ghost btn-sm" id="btnDiscard" data-i18n="doc.discard">丢弃</button>
+    </span>
+  </div>
+
+  <!-- ============================== workspace ============================== -->
+  <main class="workspace" id="workspace" data-view="split">
+
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-head">
+        <span data-i18n="outline.title">大纲</span>
+      </div>
+      <nav class="outline" id="outline" data-i18n-aria="outline.aria"></nav>
+    </aside>
+
+    <section class="pane pane-editor" id="editorPane">
+      <div class="editor-wrap" id="editorWrap">
+        <div class="gutter" id="gutter" aria-hidden="true"></div>
+        <div class="editor-body">
+          <div class="current-line" id="currentLine" aria-hidden="true"></div>
+          <textarea id="editor" class="editor" spellcheck="false" autocomplete="off"
+                    autocapitalize="off" wrap="off"
+                    data-i18n-aria="editor.aria" data-i18n-placeholder="editor.placeholder"></textarea>
+        </div>
+      </div>
+    </section>
+
+    <div class="resizer" id="resizer" role="separator" tabindex="0"
+         aria-orientation="vertical" aria-valuemin="20" aria-valuemax="80" aria-valuenow="50"
+         aria-controls="editorPane previewPane"
+         data-i18n-aria="resizer.aria"></div>
+
+    <section class="pane pane-preview" id="previewPane">
+      <article class="markdown-body" id="preview" data-i18n-aria="preview.aria"></article>
+    </section>
+  </main>
+
+  <!-- ============================== status bar ============================== -->
+  <footer class="statusbar" id="statusbar">
+    <div class="sb-group sb-left">
+      <span class="sb-item" id="stCursor">—</span>
+      <span class="sb-sep" aria-hidden="true">·</span>
+      <span class="sb-item" id="stWords">—</span>
+      <span class="sb-sep" aria-hidden="true">·</span>
+      <span class="sb-item" id="stChars">—</span>
+      <span class="sb-sep" aria-hidden="true">·</span>
+      <span class="sb-item" id="stLines">—</span>
+      <span class="sb-sep" aria-hidden="true">·</span>
+      <span class="sb-item" id="stReading">—</span>
+    </div>
+    <div class="sb-group sb-right">
+      <span class="sb-item sb-state" id="stSave">—</span>
+      <label class="sb-lang">
+        <span class="sb-label" data-i18n="st.lang">语言</span>
+        <select id="langSelect" class="sb-select"></select>
+      </label>
+      <span class="sb-item sb-theme" id="stTheme">—</span>
+    </div>
+  </footer>
+
+  <div class="toasts" id="toasts" aria-live="polite" aria-atomic="false"></div>
+
+  <!-- ============================== about dialog =========================
+       Replaces Electron's native `dialog.showMessageBox()` for the "About"
+       entry of the in-app menu. Deliberately not `alert()`: it follows the
+       current theme and language, and it can be closed with Escape.          -->
+  <div class="modal" id="aboutModal" role="dialog" aria-modal="true" aria-labelledby="aboutTitle" hidden>
+    <div class="modal-card">
+      <h2 class="modal-title" id="aboutTitle" data-i18n="about.title">关于 FoxText</h2>
+      <p class="modal-body" data-i18n="about.body"></p>
+      <p class="modal-meta" id="aboutVersion">—</p>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-accent btn-sm" id="aboutOk" data-i18n="about.ok">好</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="assets/js/markdown.js"></script>
+<script src="assets/js/i18n.js"></script>
+<script src="assets/js/app.js"></script>
+</body>
+</html>

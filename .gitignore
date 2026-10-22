@@ -1,0 +1,17 @@
+# ---- 构建产物 / 依赖 ----
+node_modules/
+dist/
+build/
+*.exe
+*.pyc
+__pycache__/
+
+# ---- 内部运维（不随开源仓库分发：含服务器地址与部署细节）----
+docs/
+deploy-tmp/
+qa-tmp/
+qa-tmp-app/
+qa-yan/
+
+# ---- 本地工作区 ----
+.workbuddy/

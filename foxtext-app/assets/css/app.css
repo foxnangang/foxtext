@@ -1,0 +1,1510 @@
+/* =============================================================================
+   FoxText — app.css
+   Single stylesheet, no external fonts or images.
+   Design tokens are inherited from the FoxText landing page (foxtext-site).
+   ========================================================================== */
+
+/* --------------------------------- tokens --------------------------------- */
+:root {
+  --bg: #0b0c0e;
+  --bg-1: #0e1013;
+  --bg-2: #111318;
+  --bg-3: #15181d;
+  --bg-4: #1a1e24;
+
+  --line: rgba(255, 255, 255, 0.08);
+  --line-strong: rgba(255, 255, 255, 0.14);
+
+  --text: #edeef0;
+  --text-2: #a6acb8;
+  --text-3: #8a93a1;
+
+  --accent: #3ddc97;
+  --accent-text: #3ddc97; /* text-on-surface accent: 10.9:1 on --bg, 9.4:1 on --bg-1 */
+  --accent-soft: rgba(61, 220, 151, 0.12);
+  --accent-line: rgba(61, 220, 151, 0.32);
+  --accent-ink: #07130d;
+
+  --code-bg: #0a0b0d;
+  --code-line: rgba(255, 255, 255, 0.06);
+  --hover: rgba(255, 255, 255, 0.05);
+  --active-line: rgba(255, 255, 255, 0.035);
+  --scrim: rgba(0, 0, 0, 0.55);
+
+  --r-s: 6px;
+  --r-m: 9px;
+  --r-l: 13px;
+
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", "Helvetica Neue",
+    Arial, "Noto Sans SC", "PingFang SC", "Hiragino Sans", "Noto Sans JP", "Microsoft YaHei",
+    sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono",
+    "Courier New", monospace;
+
+  --editor-line-height: 24px;
+  --editor-pad-y: 14px;
+  --editor-pad-x: 14px;
+
+  --topbar-h: 52px;
+  --status-h: 30px;
+  --sidebar-w: 236px;
+  --resizer-w: 6px;
+  --split: 0.5;
+
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --shadow-pop: 0 18px 40px -18px rgba(0, 0, 0, 0.8), 0 0 0 1px var(--line);
+
+  color-scheme: dark;
+}
+
+/* Light theme: an equivalent hierarchy (not a naive inversion) —
+   surfaces get lighter as they come forward, borders darken. */
+[data-theme="light"] {
+  --bg: #f3f6f4;
+  --bg-1: #ffffff;
+  --bg-2: #f7f9f7;
+  --bg-3: #eef2ef;
+  --bg-4: #e3e8e4;
+
+  --line: rgba(15, 24, 20, 0.12);
+  --line-strong: rgba(15, 24, 20, 0.22);
+
+  --text: #14181a;
+  --text-2: #4b5257;
+  --text-3: #5d666b;
+
+  --accent: #0f9b62;
+  /* darker variant for accent-coloured TEXT: 4.75:1 on --bg, 5.17:1 on --bg-1
+     (the decorative --accent only reaches 3.28:1 there, below WCAG AA) */
+  --accent-text: #0b7d4f;
+  --accent-soft: rgba(15, 155, 98, 0.1);
+  --accent-line: rgba(15, 155, 98, 0.34);
+  --accent-ink: #ffffff;
+
+  --code-bg: #eef2f0;
+  --code-line: #dbe3de;
+  --hover: rgba(15, 24, 20, 0.06);
+  --active-line: rgba(15, 24, 20, 0.045);
+  --scrim: rgba(20, 30, 26, 0.28);
+
+  --shadow-pop: 0 18px 40px -22px rgba(15, 24, 20, 0.28), 0 0 0 1px var(--line);
+
+  color-scheme: light;
+}
+
+/* --------------------------------- reset ---------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
+}
+
+h1, h2, h3, h4, h5, h6, p, ul, ol, dl, figure, pre, blockquote {
+  margin: 0;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.sprite {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+/* author rules such as `.banner { display: flex }` would otherwise beat the
+   UA `[hidden] { display: none }` rule, so make `hidden` authoritative */
+[hidden] {
+  display: none !important;
+}
+
+/* --------------------------------- shell ---------------------------------- */
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  background: var(--bg);
+}
+
+.ic {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  display: block;
+}
+
+/* -------------------------------- top bar --------------------------------- */
+.topbar {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: var(--topbar-h);
+  padding: 0 10px 0 14px;
+  background: var(--bg-1);
+  border-bottom: 1px solid var(--line);
+  position: relative;
+  z-index: 20;
+}
+
+.tb-brand {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex: 0 0 auto;
+}
+
+.logo {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: var(--r-s);
+  background: var(--accent-soft);
+  color: var(--accent);
+  border: 1px solid var(--accent-line);
+}
+
+.brand-name {
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  font-size: 14.5px;
+}
+
+.brand-badge {
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 1px 7px;
+}
+
+.tb-doc {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding-left: 4px;
+}
+
+.doc-name {
+  font-size: 13px;
+  color: var(--text-2);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.doc-dot {
+  color: var(--accent-text);
+  font-size: 10px;
+  line-height: 1;
+  transform: translateY(-1px);
+}
+
+.tb-view {
+  flex: 0 0 auto;
+}
+
+.segmented {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px;
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+}
+
+.seg {
+  font-size: 12.5px;
+  color: var(--text-3);
+  padding: 4px 12px;
+  border-radius: 999px;
+  white-space: nowrap;
+  transition: color 0.16s var(--ease), background 0.16s var(--ease);
+}
+
+.seg:hover {
+  color: var(--text);
+}
+
+.seg.is-active {
+  background: var(--bg-4);
+  color: var(--text);
+  box-shadow: inset 0 0 0 1px var(--line-strong);
+}
+
+.tb-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 0 0 auto;
+}
+
+.btn-group {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.tb-divider {
+  width: 1px;
+  height: 20px;
+  background: var(--line);
+  margin: 0 4px;
+}
+
+.icon-btn {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: var(--r-s);
+  color: var(--text-2);
+  transition: background 0.16s var(--ease), color 0.16s var(--ease);
+}
+
+.icon-btn:hover {
+  background: var(--hover);
+  color: var(--text);
+}
+
+.icon-btn:active {
+  background: var(--bg-4);
+}
+
+.icon-btn.is-on {
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+
+/* -------------------------------- dropdown -------------------------------- */
+.dropdown {
+  position: relative;
+}
+
+.menu {
+  position: absolute;
+  top: calc(100% + 7px);
+  right: 0;
+  min-width: 186px;
+  padding: 5px;
+  background: var(--bg-3);
+  border: 1px solid var(--line);
+  border-radius: var(--r-m);
+  box-shadow: var(--shadow-pop);
+  z-index: 40;
+}
+
+.menu-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 8px 10px;
+  font-size: 13px;
+  color: var(--text-2);
+  border-radius: var(--r-s);
+}
+
+.menu-item:hover {
+  background: var(--accent-soft);
+  color: var(--text);
+}
+
+/* settings popover: a checkbox row plus two explanatory notes */
+.menu-settings {
+  min-width: 254px;
+  max-width: 288px;
+}
+
+.menu-check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.menu-check .ic-check {
+  flex: 0 0 16px;
+  opacity: 0;
+  color: var(--accent);
+}
+
+.menu-check[aria-checked="true"] .ic-check {
+  opacity: 1;
+}
+
+.menu-note {
+  margin: 0;
+  padding: 6px 10px 4px;
+  font-size: 11.5px;
+  line-height: 1.55;
+  color: var(--text-3);
+}
+
+.menu-note-ver {
+  padding-top: 0;
+  color: var(--text-3);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ------------------------------- menu bar -------------------------------- */
+/*
+ * Drawn by the renderer only on hosts without a native menu bar (FoxText
+ * Lite). Kept slim (34px) so it barely eats into the editing area, and one
+ * surface step darker than .topbar so the two chrome rows stay distinct.
+ */
+.menubar {
+  flex: 0 0 auto;
+  position: relative;
+  z-index: 25;
+  background: var(--bg-2);
+  border-bottom: 1px solid var(--line);
+}
+
+.mb-scroll {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: 34px;
+  padding: 0 6px;
+}
+
+.mb-item {
+  padding: 3px 10px;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--text-2);
+  border-radius: var(--r-s);
+  white-space: nowrap;
+  transition: background 0.14s var(--ease), color 0.14s var(--ease);
+}
+
+.mb-item:hover {
+  background: var(--hover);
+  color: var(--text);
+}
+
+.mb-item.is-open {
+  background: var(--accent-soft);
+  color: var(--text);
+}
+
+/* the single shared dropdown, repositioned per root menu by app.js */
+.mb-drop {
+  position: absolute;
+  top: calc(100% + 3px);
+  left: 0;
+  min-width: 216px;
+  padding: 5px;
+  background: var(--bg-3);
+  border: 1px solid var(--line);
+  border-radius: var(--r-m);
+  box-shadow: var(--shadow-pop);
+  z-index: 45;
+}
+
+.mi {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 20px;
+  width: 100%;
+  text-align: left;
+  padding: 7px 10px;
+  font-size: 13px;
+  color: var(--text-2);
+  border-radius: var(--r-s);
+}
+
+.mi-label {
+  flex: 1 1 auto;
+}
+
+.mi:hover:not(.is-disabled),
+.mi:focus-visible:not(.is-disabled) {
+  background: var(--accent-soft);
+  color: var(--text);
+}
+
+/* Lite has no zoom API — kept visible so the menu matches Electron, but dead */
+.mi.is-disabled {
+  color: var(--text-3);
+  opacity: 0.55;
+  cursor: default;
+}
+
+.mi-accel {
+  flex: 0 0 auto;
+  font-size: 11.5px;
+  color: var(--text-3);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.mi-sep {
+  height: 1px;
+  margin: 4px 6px;
+  background: var(--line);
+}
+
+/* ------------------------------- about dialog ----------------------------- */
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: var(--scrim);
+  animation: modal-in 0.16s var(--ease);
+}
+
+.modal-card {
+  width: min(420px, 100%);
+  padding: 20px 22px 16px;
+  background: var(--bg-1);
+  border: 1px solid var(--line);
+  border-radius: var(--r-l);
+  box-shadow: var(--shadow-pop);
+}
+
+.modal-title {
+  font-size: 15.5px;
+  font-weight: 650;
+}
+
+.modal-body {
+  margin-top: 10px;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--text-2);
+}
+
+.modal-meta {
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--text-3);
+  font-variant-numeric: tabular-nums;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 18px;
+}
+
+@keyframes modal-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .modal { animation: none; }
+  .mb-item { transition: none; }
+}
+
+/* --------------------------------- banner --------------------------------- */
+.banner {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 14px;
+  background: var(--accent-soft);
+  border-bottom: 1px solid var(--accent-line);
+  font-size: 12.5px;
+  color: var(--text);
+}
+
+.banner-text {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.banner-actions {
+  display: flex;
+  gap: 6px;
+  flex: 0 0 auto;
+}
+
+.btn {
+  border-radius: var(--r-s);
+  padding: 5px 11px;
+  font-size: 12.5px;
+  border: 1px solid transparent;
+  transition: background 0.16s var(--ease), color 0.16s var(--ease);
+}
+
+.btn-sm {
+  padding: 4px 10px;
+}
+
+.btn-accent {
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-weight: 600;
+}
+
+.btn-accent:hover {
+  filter: brightness(1.06);
+}
+
+.btn-ghost {
+  border-color: var(--line-strong);
+  color: var(--text-2);
+}
+
+.btn-ghost:hover {
+  background: var(--hover);
+  color: var(--text);
+}
+
+/* -------------------------------- workspace ------------------------------- */
+.workspace {
+  flex: 1 1 auto;
+  display: flex;
+  min-height: 0;
+  min-width: 0;
+  position: relative;
+}
+
+.pane {
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.workspace[data-view="split"] .pane-editor {
+  flex: 0 0 auto;
+  width: calc((100% - var(--resizer-w)) * var(--split));
+}
+
+.workspace[data-view="split"] .pane-preview {
+  flex: 1 1 0;
+}
+
+.workspace[data-view="edit"] .pane-preview,
+.workspace[data-view="preview"] .pane-editor {
+  display: none;
+}
+
+.workspace[data-view="edit"] .resizer,
+.workspace[data-view="preview"] .resizer {
+  display: none;
+}
+
+.workspace[data-view="edit"] .pane-editor,
+.workspace[data-view="preview"] .pane-preview {
+  flex: 1 1 auto;
+  width: auto;
+}
+
+/* -------------------------------- sidebar --------------------------------- */
+.sidebar {
+  flex: 0 0 var(--sidebar-w);
+  width: var(--sidebar-w);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: var(--bg-1);
+  border-right: 1px solid var(--line);
+  overflow: hidden;
+}
+
+body.sidebar-hidden .sidebar {
+  display: none;
+}
+
+.sidebar-head {
+  flex: 0 0 auto;
+  padding: 11px 14px 8px;
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+
+.outline {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: 0 8px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.outline-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 5px 8px 5px calc(8px + var(--depth, 0) * 12px);
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: var(--text-2);
+  border-radius: var(--r-s);
+  border-left: 2px solid transparent;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.outline-item:hover {
+  background: var(--hover);
+  color: var(--text);
+}
+
+.outline-item.is-active {
+  color: var(--accent-text);
+  background: var(--accent-soft);
+  border-left-color: var(--accent);
+}
+
+.outline-item.level-1 {
+  font-weight: 600;
+  color: var(--text);
+  font-size: 13px;
+}
+
+.outline-item.level-1.is-active {
+  color: var(--accent-text);
+}
+
+.outline-empty {
+  padding: 6px 8px;
+  font-size: 12px;
+  color: var(--text-3);
+}
+
+/* --------------------------------- editor --------------------------------- */
+.editor-wrap {
+  flex: 1 1 auto;
+  display: flex;
+  min-height: 0;
+  min-width: 0;
+  background: var(--bg);
+}
+
+.gutter {
+  flex: 0 0 auto;
+  width: 52px;
+  overflow: hidden;
+  padding: var(--editor-pad-y) 8px var(--editor-pad-y) 0;
+  text-align: right;
+  color: var(--text-3);
+  opacity: 0.55;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: var(--editor-line-height);
+  white-space: pre;
+  user-select: none;
+  background: var(--bg-1);
+  border-right: 1px solid var(--line);
+}
+
+.editor-body {
+  position: relative;
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+}
+
+.current-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: var(--editor-line-height);
+  background: var(--active-line);
+  pointer-events: none;
+  opacity: 0;
+  will-change: transform;
+}
+
+.editor {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: var(--editor-pad-y) var(--editor-pad-x);
+  border: 0;
+  outline: none;
+  resize: none;
+  background: transparent;
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 13.5px;
+  line-height: var(--editor-line-height);
+  tab-size: 2;
+  white-space: pre;
+  overflow: auto;
+  caret-color: var(--accent);
+}
+
+.editor::placeholder {
+  color: var(--text-3);
+}
+
+/* -------------------------------- resizer --------------------------------- */
+.resizer {
+  flex: 0 0 var(--resizer-w);
+  width: var(--resizer-w);
+  cursor: col-resize;
+  background: var(--bg-1);
+  border-left: 1px solid var(--line);
+  border-right: 1px solid var(--line);
+  position: relative;
+  transition: background 0.16s var(--ease);
+}
+
+.resizer::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 2px;
+  height: 34px;
+  transform: translate(-50%, -50%);
+  border-radius: 2px;
+  background: var(--line-strong);
+  transition: background 0.16s var(--ease);
+}
+
+.resizer:hover,
+body.is-resizing .resizer {
+  background: var(--accent-soft);
+}
+
+.resizer:hover::after,
+body.is-resizing .resizer::after {
+  background: var(--accent);
+}
+
+body.is-resizing {
+  cursor: col-resize;
+  user-select: none;
+}
+
+/* -------------------------------- preview --------------------------------- */
+.pane-preview {
+  background: var(--bg);
+  overflow-y: auto;
+  position: relative;
+  scroll-behavior: auto;
+}
+
+.pane-preview::-webkit-scrollbar,
+.editor::-webkit-scrollbar,
+.outline::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.pane-preview::-webkit-scrollbar-thumb,
+.editor::-webkit-scrollbar-thumb,
+.outline::-webkit-scrollbar-thumb {
+  background: var(--line-strong);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+.pane-preview::-webkit-scrollbar-thumb:hover,
+.editor::-webkit-scrollbar-thumb:hover {
+  background: var(--text-3);
+  background-clip: content-box;
+}
+
+.pane-preview::-webkit-scrollbar-track,
+.editor::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.markdown-body {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 30px 34px 160px;
+  font-size: 15px;
+  line-height: 1.75;
+  color: var(--text);
+  word-wrap: break-word;
+}
+
+/* ------------------------- markdown typography ---------------------------- */
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6 {
+  line-height: 1.32;
+  font-weight: 650;
+  letter-spacing: -0.012em;
+  margin: 1.9em 0 0.62em;
+  scroll-margin-top: 20px;
+}
+
+.markdown-body h1 {
+  font-size: 1.86em;
+  margin-top: 0.2em;
+  padding-bottom: 0.32em;
+  border-bottom: 1px solid var(--line);
+}
+
+.markdown-body h2 {
+  font-size: 1.42em;
+  padding-bottom: 0.26em;
+  border-bottom: 1px solid var(--line);
+}
+
+.markdown-body h3 { font-size: 1.18em; }
+.markdown-body h4 { font-size: 1.04em; }
+
+.markdown-body h5,
+.markdown-body h6 {
+  font-size: 0.98em;
+  color: var(--text-2);
+}
+
+.markdown-body p,
+.markdown-body ul,
+.markdown-body ol,
+.markdown-body blockquote,
+.markdown-body pre,
+.markdown-body table,
+.markdown-body hr,
+.markdown-body .code-block {
+  margin: 0 0 1.05em;
+}
+
+.markdown-body ul,
+.markdown-body ol {
+  padding-left: 1.45em;
+}
+
+.markdown-body li {
+  margin: 0.24em 0;
+}
+
+.markdown-body li > ul,
+.markdown-body li > ol {
+  margin: 0.24em 0 0.1em;
+}
+
+.markdown-body li::marker {
+  color: var(--text-3);
+}
+
+.markdown-body a {
+  color: var(--accent-text);
+  text-decoration: underline;
+  text-decoration-color: var(--accent-line);
+  text-underline-offset: 2.5px;
+  transition: text-decoration-color 0.16s var(--ease);
+}
+
+.markdown-body a:hover {
+  text-decoration-color: var(--accent);
+}
+
+.markdown-body strong {
+  font-weight: 660;
+  color: var(--text);
+}
+
+.markdown-body em {
+  font-style: italic;
+}
+
+.markdown-body del {
+  color: var(--text-3);
+}
+
+.markdown-body code {
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  background: var(--code-bg);
+  border: 1px solid var(--code-line);
+  border-radius: 4px;
+  padding: 0.12em 0.36em;
+  color: var(--text);
+}
+
+.markdown-body .code-block {
+  position: relative;
+  margin-bottom: 1.05em;
+}
+
+.markdown-body pre {
+  margin: 0;
+  background: var(--code-bg);
+  border: 1px solid var(--code-line);
+  border-radius: var(--r-m);
+  padding: 13px 15px;
+  overflow: auto;
+  line-height: 1.62;
+}
+
+.markdown-body pre code {
+  background: none;
+  border: 0;
+  padding: 0;
+  font-size: 12.8px;
+  color: var(--text);
+  display: block;
+  white-space: pre;
+}
+
+.code-lang {
+  position: absolute;
+  top: 7px;
+  left: 12px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  pointer-events: none;
+}
+
+.code-lang + pre {
+  padding-top: 24px;
+}
+
+.code-copy {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  font-size: 11px;
+  color: var(--text-3);
+  background: var(--bg-3);
+  border: 1px solid var(--line);
+  border-radius: var(--r-s);
+  padding: 2px 8px;
+  opacity: 0;
+  transition: opacity 0.16s var(--ease), color 0.16s var(--ease);
+}
+
+.code-block:hover .code-copy,
+.code-copy:focus-visible {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .code-copy {
+    opacity: 0.8;
+  }
+}
+
+.code-copy:hover {
+  color: var(--accent-text);
+  border-color: var(--accent-line);
+}
+
+.markdown-body blockquote {
+  padding: 0.15em 0 0.15em 0.95em;
+  border-left: 3px solid var(--accent-line);
+  color: var(--text-2);
+  background: none;
+}
+
+.markdown-body blockquote blockquote {
+  margin-top: 0.6em;
+}
+
+.markdown-body blockquote > :last-child {
+  margin-bottom: 0;
+}
+
+.markdown-body table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.94em;
+  display: table;
+}
+
+.markdown-body th,
+.markdown-body td {
+  border: 1px solid var(--line);
+  padding: 7px 11px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.markdown-body th {
+  background: var(--bg-2);
+  font-weight: 620;
+  color: var(--text);
+}
+
+.markdown-body tbody tr:nth-child(even) {
+  background: var(--bg-2);
+}
+
+.markdown-body hr {
+  border: 0;
+  border-top: 1px solid var(--line);
+  margin: 1.8em 0;
+}
+
+.markdown-body img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--r-s);
+  border: 1px solid var(--line);
+}
+
+.markdown-body .task-item {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.4em;
+}
+
+.markdown-body input[type="checkbox"] {
+  accent-color: var(--accent);
+  width: 13px;
+  height: 13px;
+  margin: 0;
+  cursor: default;
+  pointer-events: none;
+}
+
+/* ------------------------------- status bar -------------------------------- */
+.statusbar {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  height: var(--status-h);
+  padding: 0 14px;
+  background: var(--bg-1);
+  border-top: 1px solid var(--line);
+  font-size: 11.5px;
+  color: var(--text-3);
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.sb-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.sb-item {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sb-left {
+  justify-content: flex-start;
+}
+
+.sb-right {
+  justify-content: flex-end;
+}
+
+.sb-theme {
+  color: var(--text-3);
+}
+
+.sb-sep {
+  opacity: 0.5;
+}
+
+.sb-state {
+  color: var(--text-2);
+}
+
+.sb-state.is-dirty {
+  color: var(--accent-text);
+}
+
+.sb-lang {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.sb-label {
+  color: var(--text-3);
+}
+
+.sb-select {
+  font: inherit;
+  font-size: 11.5px;
+  color: var(--text-2);
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  padding: 1px 4px;
+  cursor: pointer;
+}
+
+.sb-select:hover {
+  color: var(--text);
+  border-color: var(--line-strong);
+}
+
+/* --------------------------------- toasts --------------------------------- */
+.toasts {
+  position: fixed;
+  left: 50%;
+  bottom: 46px;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  z-index: 90;
+  pointer-events: none;
+}
+
+.toast {
+  padding: 7px 15px;
+  font-size: 12.5px;
+  color: var(--text);
+  background: var(--bg-3);
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  box-shadow: var(--shadow-pop);
+  animation: toast-in 0.18s var(--ease);
+  max-width: 78vw;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.toast.is-leaving {
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.2s var(--ease), transform 0.2s var(--ease);
+}
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toast { animation: none; }
+  .toast.is-leaving { transition: none; }
+}
+
+/* ------------------------------- focus mode -------------------------------- */
+body.is-focus .sidebar,
+body.is-focus .statusbar,
+body.is-focus .brand-badge,
+body.is-focus .tb-doc {
+  display: none;
+}
+
+body.is-focus .topbar {
+  opacity: 0.35;
+  transition: opacity 0.2s var(--ease);
+}
+
+body.is-focus .topbar:hover,
+body.is-focus .topbar:focus-within {
+  opacity: 1;
+}
+
+/* the menu bar fades with the toolbar in focus mode but stays reachable */
+body.is-focus .menubar {
+  opacity: 0.35;
+  transition: opacity 0.2s var(--ease);
+}
+
+body.is-focus .menubar:hover,
+body.is-focus .menubar:focus-within {
+  opacity: 1;
+}
+
+body.is-focus .markdown-body {
+  padding-bottom: 40vh;
+}
+
+/* ------------------------- narrow / responsive ---------------------------- */
+/*
+ * Degradation strategy
+ *  - <= 900px: the outline becomes an overlay drawer (only shown when the user
+ *    toggles it), the split view stacks editor above preview, and the drag
+ *    resizer is hidden (a percentage split is meaningless in a column layout).
+ *  - <= 768px: paddings and type scale shrink, low-value status items hide.
+ */
+@media (max-width: 900px) {
+  .sidebar {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 30;
+    transform: translateX(-102%);
+    transition: transform 0.2s var(--ease);
+    box-shadow: none;
+    width: 260px;
+    flex-basis: 260px;
+  }
+
+  body.sidebar-hidden .sidebar {
+    display: flex;
+    transform: translateX(-102%);
+  }
+
+  body.sidebar-forced .sidebar {
+    transform: none;
+    box-shadow: 0 0 0 100vmax var(--scrim), var(--shadow-pop);
+  }
+
+  .workspace[data-view="split"] {
+    flex-direction: column;
+  }
+
+  .workspace[data-view="split"] .pane-editor {
+    width: auto;
+    flex: 1 1 50%;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .workspace[data-view="split"] .pane-preview {
+    flex: 1 1 50%;
+    border-left: 0;
+  }
+
+  .resizer {
+    display: none;
+  }
+
+  .brand-badge {
+    display: none;
+  }
+
+  .tb-doc {
+    max-width: 30vw;
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --topbar-h: 48px;
+    --editor-pad-x: 10px;
+  }
+
+  .topbar {
+    gap: 6px;
+    padding: 0 8px;
+  }
+
+  .brand-name {
+    display: none;
+  }
+
+  .seg {
+    padding: 4px 9px;
+    font-size: 12px;
+  }
+
+  .icon-btn {
+    width: 28px;
+    height: 28px;
+  }
+
+  .tb-divider {
+    margin: 0 2px;
+  }
+
+  .markdown-body {
+    padding: 20px 16px 120px;
+    font-size: 14.5px;
+  }
+
+  .gutter {
+    width: 38px;
+    font-size: 12px;
+    padding-right: 6px;
+  }
+
+  .statusbar {
+    padding: 0 10px;
+    font-size: 11px;
+  }
+
+  #stLines,
+  #stReading {
+    display: none;
+  }
+
+  .sb-sep:last-of-type {
+    display: none;
+  }
+}
+
+/* Very narrow phones (320–560px): the toolbar reflows onto multiple rows
+   instead of overflowing. Nothing is hidden and no horizontal scrollbar is
+   introduced — the top bar grows in height and the workspace shrinks. */
+@media (max-width: 560px) {
+  /* the four roots can never shrink below their labels, so let the row scroll
+     sideways rather than overflow the window (the dropdown lives outside this
+     scroller, so it is never clipped) */
+  .mb-scroll {
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .mb-scroll::-webkit-scrollbar {
+    height: 0;
+  }
+
+  .mb-item {
+    flex: 0 0 auto;
+    padding: 3px 8px;
+  }
+
+  .topbar {
+    height: auto;
+    min-height: 40px;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 8px;
+  }
+
+  .tb-brand {
+    order: 1;
+    flex: 0 0 auto;
+  }
+
+  .tb-doc {
+    order: 2;
+    flex: 1 1 40px;
+    max-width: 44vw;
+  }
+
+  .tb-view {
+    order: 2;
+    flex: 0 0 auto;
+  }
+
+  .tb-actions {
+    order: 3;
+    flex: 1 1 100%;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: center;
+    row-gap: 4px;
+    max-width: 100%;
+  }
+
+  .btn-group {
+    flex: 0 0 auto;
+  }
+
+  /* a divider that lands at a wrap boundary looks like a stray pixel */
+  .tb-divider {
+    display: none;
+  }
+
+  .icon-btn {
+    width: 26px;
+    height: 26px;
+  }
+
+  .ic {
+    width: 16px;
+    height: 16px;
+  }
+
+  .seg {
+    padding: 3px 8px;
+  }
+}
+
+@media (max-width: 520px) {
+  .tb-view .segmented {
+    gap: 0;
+  }
+
+  .seg {
+    padding: 4px 7px;
+  }
+
+  #stChars {
+    display: none;
+  }
+}
+
+/* ------------------------------- print (app) ------------------------------- */
+@media print {
+  .topbar,
+  .sidebar,
+  .statusbar,
+  .resizer,
+  .toasts,
+  .banner {
+    display: none !important;
+  }
+
+  body,
+  .app,
+  .pane-preview {
+    height: auto;
+    overflow: visible;
+    background: #ffffff;
+    color: #000000;
+  }
+
+  .workspace,
+  .workspace[data-view="split"] {
+    display: block;
+  }
+
+  .pane-editor {
+    display: none !important;
+  }
+
+  .markdown-body {
+    max-width: none;
+    padding: 0;
+  }
+}

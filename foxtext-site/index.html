@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="dark" />
+  <meta name="theme-color" content="#0B0C0E" />
+  <title>FoxText</title>
+  <meta name="description" id="metaDescription" content="FoxText 是一款免费开源的跨平台 Markdown 编辑器，支持 Windows、macOS 与 Linux，提供实时双栏预览、KaTeX 数学公式、Mermaid 图表与 PDF / HTML / Word 导出，安装包仅 12.8 MB。" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%230B0C0E'/%3E%3Cpath d='M6 5.5 9.5 9h5L18 5.5v6.7A6 6 0 0 1 12 19a6 6 0 0 1-6-6.8V5.5Z' fill='none' stroke='%233DDC97' stroke-width='1.5' stroke-linejoin='round'/%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body id="top">
+
+  <a class="skip-link" href="#main" data-i18n="a11y.skip"></a>
+
+  <!-- ============================ HEADER ============================ -->
+  <header class="site-header" id="siteHeader">
+    <div class="container header-inner">
+      <a class="brand" href="#top" aria-label="FoxText">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M4.6 3.4 9 7.9h6l4.4-4.5v8.1A7.4 7.4 0 0 1 12 21a7.4 7.4 0 0 1-7.4-9.5V3.4Z"
+                  stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" />
+            <circle cx="9.6" cy="12" r="1.15" fill="currentColor" />
+            <circle cx="14.4" cy="12" r="1.15" fill="currentColor" />
+            <path d="M12 15.1v1.7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+          </svg>
+        </span>
+        <span class="brand-name">FoxText</span>
+      </a>
+
+      <nav class="nav-links" id="navLinks" data-i18n-aria="nav.navLabel" aria-label="Main">
+        <a class="nav-link" href="#features" data-i18n="nav.features"></a>
+        <a class="nav-link" href="#screenshots" data-i18n="nav.screenshots"></a>
+        <a class="nav-link" href="#download" data-i18n="nav.download"></a>
+        <a class="nav-link" href="#opensource" data-i18n="nav.docs"></a>
+        <a class="nav-link nav-link--ext" href="https://github.com/foxtext/foxtext" target="_blank" rel="noopener">
+          <span data-i18n="nav.github"></span>
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" class="ico-ext">
+            <path d="M8 16 16 8M9 8h7v7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </a>
+      </nav>
+
+      <div class="header-actions">
+        <div class="lang-switch" role="group" data-i18n-aria="nav.langLabel" aria-label="Language">
+          <button class="lang-btn" type="button" lang="zh-CN" data-lang="zh-CN">中</button>
+          <button class="lang-btn" type="button" lang="en" data-lang="en">EN</button>
+          <button class="lang-btn" type="button" lang="ja" data-lang="ja">日</button>
+        </div>
+        <a class="btn btn-primary btn-sm header-cta" href="#download" data-i18n="nav.cta"></a>
+        <button class="menu-toggle" id="menuToggle" type="button" aria-expanded="false" aria-controls="mobileMenu"
+                data-i18n-aria="nav.menuLabel" aria-label="Menu">
+          <span class="menu-bars" aria-hidden="true"><i></i><i></i></span>
+        </button>
+      </div>
+    </div>
+
+    <div class="mobile-menu" id="mobileMenu">
+      <div class="container mobile-menu-inner">
+        <a class="mobile-link" href="#features" data-i18n="nav.features"></a>
+        <a class="mobile-link" href="#screenshots" data-i18n="nav.screenshots"></a>
+        <a class="mobile-link" href="#download" data-i18n="nav.download"></a>
+        <a class="mobile-link" href="#opensource" data-i18n="nav.docs"></a>
+        <a class="mobile-link" href="https://github.com/foxtext/foxtext" target="_blank" rel="noopener" data-i18n="nav.github"></a>
+        <div class="lang-switch lang-switch--mobile" role="group" data-i18n-aria="nav.langLabel" aria-label="Language">
+          <button class="lang-btn" type="button" lang="zh-CN" data-lang="zh-CN">中</button>
+          <button class="lang-btn" type="button" lang="en" data-lang="en">EN</button>
+          <button class="lang-btn" type="button" lang="ja" data-lang="ja">日</button>
+        </div>
+        <a class="btn btn-primary mobile-cta" href="#download" data-i18n="nav.cta"></a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <!-- ============================ HERO ============================ -->
+    <section class="hero">
+      <div class="bg-grid" aria-hidden="true"></div>
+      <div class="hero-glow" aria-hidden="true"></div>
+
+      <div class="container hero-inner">
+        <div class="hero-copy">
+          <p class="eyebrow reveal">
+            <span class="pulse" aria-hidden="true"></span>
+            <span data-i18n="hero.badge"></span>
+          </p>
+
+          <h1 class="hero-title reveal">
+            <span data-i18n="hero.title1"></span>
+            <span class="accent-text" data-i18n="hero.title2"></span>
+          </h1>
+
+          <p class="hero-sub reveal" data-i18n="hero.subtitle"></p>
+
+          <div class="hero-actions reveal">
+            <a class="btn btn-primary" href="#download">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M12 4v10m0 0 4-4m-4 4-4-4M5 17.5V19a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-1.5"
+                      stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              <span data-i18n="hero.ctaPrimary"></span>
+            </a>
+            <a class="btn btn-ghost" href="https://github.com/foxtext/foxtext" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M12 2.2a9.8 9.8 0 0 0-3.1 19.1c.5.1.7-.2.7-.5v-1.9c-2.7.6-3.3-1.2-3.3-1.2-.4-1.1-1.1-1.4-1.1-1.4-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.3 1.1 2.9.8.1-.6.3-1.1.6-1.3-2.2-.2-4.4-1.1-4.4-4.8 0-1.1.4-1.9 1-2.6-.1-.3-.4-1.3.1-2.6 0 0 .8-.3 2.7 1a9.2 9.2 0 0 1 4.9 0c1.9-1.3 2.7-1 2.7-1 .5 1.3.2 2.3.1 2.6.6.7 1 1.5 1 2.6 0 3.7-2.3 4.5-4.4 4.8.4.3.7 1 .7 2v2.9c0 .3.2.6.7.5A9.8 9.8 0 0 0 12 2.2Z" />
+              </svg>
+              <span data-i18n="hero.ctaSecondary"></span>
+            </a>
+          </div>
+
+          <p class="hero-meta reveal">
+            <span class="hero-meta-item">v2.6.0</span>
+            <span class="hero-meta-sep" aria-hidden="true"></span>
+            <span class="hero-meta-item">MIT License</span>
+            <span class="hero-meta-sep" aria-hidden="true"></span>
+            <span class="hero-meta-item">12.8 MB</span>
+          </p>
+        </div>
+
+        <!-- ---------- application window (visual centrepiece) ---------- -->
+        <div class="hero-visual">
+          <div class="app-window reveal" aria-hidden="true">
+            <div class="win-bar">
+              <span class="win-dots"><i></i><i></i><i></i></span>
+              <span class="win-title">README.md</span>
+              <span class="win-live">
+                <span class="pulse"></span>
+                <span data-i18n="hero.win.live"></span>
+              </span>
+            </div>
+
+            <div class="win-body">
+              <aside class="win-side">
+                <p class="side-label" data-i18n="hero.win.explorer"></p>
+                <ul class="tree">
+                  <li class="tree-item tree-item--dir">
+                    <svg viewBox="0 0 24 24" fill="none">
+                      <path d="M4 7.5A1.5 1.5 0 0 1 5.5 6h3.2l1.6 2h8.2A1.5 1.5 0 0 1 20 9.5v7A1.5 1.5 0 0 1 18.5 18h-13A1.5 1.5 0 0 1 4 16.5v-9Z"
+                            stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
+                    </svg>
+                    <span>docs</span>
+                  </li>
+                  <li class="tree-item is-active">
+                    <svg viewBox="0 0 24 24" fill="none">
+                      <path d="M6 4h7l5 5v11H6V4Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
+                      <path d="M13 4v5h5" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
+                    </svg>
+                    <span>README.md</span>
+                    <span class="tree-dot"></span>
+                  </li>
+                  <li class="tree-item">
+                    <svg viewBox="0 0 24 24" fill="none">
+                      <path d="M6 4h7l5 5v11H6V4Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
+                      <path d="M13 4v5h5" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
+                    </svg>
+                    <span>notes.md</span>
+                  </li>
+                  <li class="tree-item tree-item--dir">
+                    <svg viewBox="0 0 24 24" fill="none">
+                      <path d="M4 7.5A1.5 1.5 0 0 1 5.5 6h3.2l1.6 2h8.2A1.5 1.5 0 0 1 20 9.5v7A1.5 1.5 0 0 1 18.5 18h-13A1.5 1.5 0 0 1 4 16.5v-9Z"
+                            stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
+                    </svg>
+                    <span>images</span>
+                  </li>
+                </ul>
+                <span class="side-chip" data-i18n="hero.win.saved"></span>
+              </aside>
+
+              <div class="win-editor">
+                <div class="pane-head">
+                  <span class="pane-name">markdown</span>
+                  <span class="pane-badge">UTF-8</span>
+                </div>
+                <div class="src">
+                  <div class="ln"><span class="num">1</span><span class="code"><span class="t-h1"># FoxText</span></span></div>
+                  <div class="ln"><span class="num">2</span><span class="code"></span></div>
+                  <div class="ln"><span class="num">3</span><span class="code"><span class="t-quote">&gt; Write Markdown, beautifully.</span></span></div>
+                  <div class="ln"><span class="num">4</span><span class="code"></span></div>
+                  <div class="ln"><span class="num">5</span><span class="code"><span class="t-h2">## Features</span></span></div>
+                  <div class="ln"><span class="num">6</span><span class="code">- <span class="t-b">**Live**</span> split preview</span></div>
+                  <div class="ln"><span class="num">7</span><span class="code">- math via <span class="t-alt">`KaTeX`</span></span></div>
+                  <div class="ln"><span class="num">8</span><span class="code">- <span class="t-link">[Mermaid](https://mermaid.js.org)</span></span></div>
+                  <div class="ln"><span class="num">9</span><span class="code"></span></div>
+                  <div class="ln"><span class="num">10</span><span class="code"><span class="t-fence">```js</span></span></div>
+                  <div class="ln"><span class="num">11</span><span class="code"><span class="t-kw">const</span> doc = <span class="t-kw">new</span> <span class="t-fn">FoxText</span>();</span></div>
+                  <div class="ln"><span class="num">12</span><span class="code">doc.<span class="t-fn">render</span>();</span></div>
+                  <div class="ln"><span class="num">13</span><span class="code"><span class="t-fence">```</span></span></div>
+                </div>
+              </div>
+
+              <div class="win-preview">
+                <div class="pane-head">
+                  <span class="pane-name" data-i18n="hero.win.preview"></span>
+                </div>
+                <div class="md">
+                  <p class="md-h1">FoxText</p>
+                  <p class="md-quote">Write Markdown, beautifully.</p>
+                  <p class="md-h2">Features</p>
+                  <ul class="md-list">
+                    <li><b>Live</b> split preview</li>
+                    <li>math via <code>KaTeX</code></li>
+                    <li><span class="md-link">Mermaid</span></li>
+                  </ul>
+                  <div class="md-formula">E = mc<sup>2</sup></div>
+                  <div class="md-code">
+                    <span><i class="t-kw">const</i> doc = <i class="t-kw">new</i> <i class="t-fn">FoxText</i>();</span>
+                    <span>doc.<i class="t-fn">render</i>();</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ STATS ============================ -->
+    <section class="stats">
+      <div class="container">
+        <dl class="stats-grid">
+          <div class="stat reveal">
+            <dt class="stat-label" data-i18n="stats.stars"></dt>
+            <dd class="stat-num">28.4k</dd>
+          </div>
+          <div class="stat reveal">
+            <dt class="stat-label" data-i18n="stats.downloads"></dt>
+            <dd class="stat-num">640k+</dd>
+          </div>
+          <div class="stat reveal">
+            <dt class="stat-label" data-i18n="stats.contributors"></dt>
+            <dd class="stat-num">214</dd>
+          </div>
+          <div class="stat reveal">
+            <dt class="stat-label" data-i18n="stats.size"></dt>
+            <dd class="stat-num">12.8<span class="stat-unit">MB</span></dd>
+          </div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- ============================ FEATURES ============================ -->
+    <section class="section" id="features">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow"><span class="dot" aria-hidden="true"></span><span data-i18n="features.eyebrow"></span></p>
+          <h2 class="section-title" data-i18n="features.title"></h2>
+          <p class="section-sub" data-i18n="features.subtitle"></p>
+        </div>
+
+        <div class="features-grid">
+          <!-- flagship: live split preview -->
+          <article class="card card--w2 reveal">
+            <div class="card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <rect x="3" y="4.5" width="18" height="15" rx="2" stroke="currentColor" stroke-width="1.5" />
+                <path d="M12 4.5v15" stroke="currentColor" stroke-width="1.5" />
+                <path d="M5.6 8.4h3.6M5.6 11.4h3.6M5.6 14.4h2.4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" />
+                <path d="M14.6 9h3.4M14.6 12.4h3.4M14.6 15.6h2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" />
+              </svg>
+            </div>
+            <h3 class="card-title" data-i18n="features.preview.title"></h3>
+            <p class="card-desc" data-i18n="features.preview.desc"></p>
+            <div class="card-visual" aria-hidden="true">
+              <div class="cv-pane">
+                <span class="cv-line cv-line--h"></span>
+                <span class="cv-line"></span>
+                <span class="cv-line cv-line--w70"></span>
+                <span class="cv-line cv-line--w40"></span>
+              </div>
+              <div class="cv-pane">
+                <span class="cv-line cv-line--h"></span>
+                <span class="cv-line cv-line--w85"></span>
+                <span class="cv-line cv-line--w55"></span>
+                <span class="cv-line cv-line--w70"></span>
+              </div>
+            </div>
+          </article>
+
+          <article class="card card--w1 reveal">
+            <div class="card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M7 8.5 4.5 12 7 15.5M17 8.5 19.5 12 17 15.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M13.6 7.4l-3.2 9.2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+              </svg>
+            </div>
+            <h3 class="card-title" data-i18n="features.math.title"></h3>
+            <p class="card-desc" data-i18n="features.math.desc"></p>
+          </article>
+
+          <article class="card card--w1 reveal">
+            <div class="card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M13 3 5.5 13.5H11L10 21l7.5-10.5H12L13 3Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
+              </svg>
+            </div>
+            <h3 class="card-title" data-i18n="features.speed.title"></h3>
+            <p class="card-desc" data-i18n="features.speed.desc"></p>
+          </article>
+
+          <article class="card card--w2 reveal">
+            <div class="card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <rect x="3" y="4.5" width="18" height="15" rx="2" stroke="currentColor" stroke-width="1.5" />
+                <path d="M3 8.6h18" stroke="currentColor" stroke-width="1.5" />
+                <path d="M9.6 11.6 7.4 14l2.2 2.4M14.4 11.6 16.6 14l-2.2 2.4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </div>
+            <h3 class="card-title" data-i18n="features.code.title"></h3>
+            <p class="card-desc" data-i18n="features.code.desc"></p>
+            <div class="card-visual card-visual--code" aria-hidden="true">
+              <span class="cv-code"><i class="t-kw">export</i> <i class="t-kw">const</i> render = (src) =&gt; {</span>
+              <span class="cv-code">&nbsp;&nbsp;<i class="t-kw">return</i> md.<i class="t-fn">toHtml</i>(src);</span>
+              <span class="cv-code">};</span>
+            </div>
+          </article>
+
+          <article class="card card--w2 reveal">
+            <div class="card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.5" />
+                <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.5" />
+                <path d="M12 2.6v2.6M12 18.8v2.6M2.6 12h2.6M18.8 12h2.6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" />
+              </svg>
+            </div>
+            <h3 class="card-title" data-i18n="features.focus.title"></h3>
+            <p class="card-desc" data-i18n="features.focus.desc"></p>
+            <ul class="card-chips" aria-hidden="true">
+              <li>Focus mode</li>
+              <li>Outline</li>
+              <li>Vim / Emacs</li>
+              <li>Typewriter</li>
+            </ul>
+          </article>
+
+          <article class="card card--w1 reveal">
+            <div class="card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M6 4h7l5 5v11H6V4Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
+                <path d="M13 4v5h5" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
+                <path d="M9 14.4h4.4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" />
+              </svg>
+            </div>
+            <h3 class="card-title" data-i18n="features.export.title"></h3>
+            <p class="card-desc" data-i18n="features.export.desc"></p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ DEMO TABS ============================ -->
+    <section class="section section--alt" id="screenshots">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow"><span class="dot" aria-hidden="true"></span><span data-i18n="demo.eyebrow"></span></p>
+          <h2 class="section-title" data-i18n="demo.title"></h2>
+          <p class="section-sub" data-i18n="demo.subtitle"></p>
+        </div>
+
+        <div class="tabs reveal">
+          <div class="tab-list" role="tablist" data-i18n-aria="demo.tablistLabel" aria-label="Demos">
+            <button class="tab is-active" type="button" role="tab" id="tab-1" aria-controls="panel-1" aria-selected="true" tabindex="0" data-tab="1">
+              <span data-i18n="demo.tab1"></span>
+            </button>
+            <button class="tab" type="button" role="tab" id="tab-2" aria-controls="panel-2" aria-selected="false" tabindex="-1" data-tab="2">
+              <span data-i18n="demo.tab2"></span>
+            </button>
+            <button class="tab" type="button" role="tab" id="tab-3" aria-controls="panel-3" aria-selected="false" tabindex="-1" data-tab="3">
+              <span data-i18n="demo.tab3"></span>
+            </button>
+          </div>
+
+          <div class="tab-panels">
+            <!-- panel 1 -->
+            <div class="tab-panel is-active" id="panel-1" role="tabpanel" aria-labelledby="tab-1" tabindex="0">
+              <div class="shot">
+                <div class="shot-bar" aria-hidden="true"><i></i><i></i><i></i><span>chapter-01.md</span></div>
+                <div class="shot-body shot-body--split">
+                  <div class="shot-src" aria-hidden="true">
+                    <div class="ln"><span class="num">1</span><span class="code"><span class="t-h1"># A quiet place</span></span></div>
+                    <div class="ln"><span class="num">2</span><span class="code"></span></div>
+                    <div class="ln"><span class="num">3</span><span class="code">The cursor stays, <span class="t-b">**the page disappears**</span>.</span></div>
+                    <div class="ln"><span class="num">4</span><span class="code"></span></div>
+                    <div class="ln"><span class="num">5</span><span class="code"><span class="t-h2">## Outline</span></span></div>
+                    <div class="ln"><span class="num">6</span><span class="code">1. <span class="t-link">Write</span></span></div>
+                    <div class="ln"><span class="num">7</span><span class="code">2. Preview</span></div>
+                    <div class="ln"><span class="num">8</span><span class="code">3. <span class="t-alt">`Export`</span></span></div>
+                  </div>
+                  <div class="shot-md" aria-hidden="true">
+                    <p class="md-h1">A quiet place</p>
+                    <p>The cursor stays, <b>the page disappears</b>.</p>
+                    <p class="md-h2">Outline</p>
+                    <ol class="md-list">
+                      <li><span class="md-link">Write</span></li>
+                      <li>Preview</li>
+                      <li><code>Export</code></li>
+                    </ol>
+                    <div class="shot-outline">
+                      <span class="ol-item ol-item--1 is-current"></span>
+                      <span class="ol-item ol-item--2"></span>
+                      <span class="ol-item ol-item--2"></span>
+                      <span class="ol-item ol-item--3"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="shot-caption">
+                <h3 class="shot-title" data-i18n="demo.p1.title"></h3>
+                <p class="shot-desc" data-i18n="demo.p1.desc"></p>
+              </div>
+            </div>
+
+            <!-- panel 2 -->
+            <div class="tab-panel" id="panel-2" role="tabpanel" aria-labelledby="tab-2" tabindex="0" hidden>
+              <div class="shot">
+                <div class="shot-bar" aria-hidden="true"><i></i><i></i><i></i><span>paper.md</span></div>
+                <div class="shot-body shot-body--math">
+                  <div class="math-card">
+                    <p class="math-src" aria-hidden="true">$$ \int_0^\infty e^{-x^2}dx = \frac{\sqrt{\pi}}{2} $$</p>
+                    <p class="math-out">∫<sub>0</sub><sup>∞</sup> e<sup>−x²</sup> dx = √π ⁄ 2</p>
+                    <p class="math-tag">KaTeX</p>
+                  </div>
+                  <div class="flow-card" aria-hidden="true">
+                    <div class="flow-node flow-node--start">draft</div>
+                    <div class="flow-arrow"><span></span></div>
+                    <div class="flow-node">review</div>
+                    <div class="flow-arrow"><span></span></div>
+                    <div class="flow-node flow-node--accent">publish</div>
+                    <p class="math-tag">Mermaid</p>
+                  </div>
+                </div>
+              </div>
+              <div class="shot-caption">
+                <h3 class="shot-title" data-i18n="demo.p2.title"></h3>
+                <p class="shot-desc" data-i18n="demo.p2.desc"></p>
+              </div>
+            </div>
+
+            <!-- panel 3 -->
+            <div class="tab-panel" id="panel-3" role="tabpanel" aria-labelledby="tab-3" tabindex="0" hidden>
+              <div class="shot">
+                <div class="shot-bar" aria-hidden="true"><i></i><i></i><i></i><span>Export</span></div>
+                <div class="shot-body shot-body--export">
+                  <div class="export-row" aria-hidden="true">
+                    <span class="export-ico">PDF</span>
+                    <span class="export-name">README.pdf</span>
+                    <span class="export-bar"><i style="--p:100%"></i></span>
+                    <span class="export-state">done</span>
+                  </div>
+                  <div class="export-row" aria-hidden="true">
+                    <span class="export-ico">HTML</span>
+                    <span class="export-name">README.html</span>
+                    <span class="export-bar"><i style="--p:100%"></i></span>
+                    <span class="export-state">done</span>
+                  </div>
+                  <div class="export-row" aria-hidden="true">
+                    <span class="export-ico">DOCX</span>
+                    <span class="export-name">README.docx</span>
+                    <span class="export-bar"><i style="--p:72%"></i></span>
+                    <span class="export-state export-state--busy">72%</span>
+                  </div>
+                  <div class="export-row" aria-hidden="true">
+                    <span class="export-ico">PNG</span>
+                    <span class="export-name">cover.png</span>
+                    <span class="export-bar"><i style="--p:0%"></i></span>
+                    <span class="export-state export-state--idle">queued</span>
+                  </div>
+                </div>
+              </div>
+              <div class="shot-caption">
+                <h3 class="shot-title" data-i18n="demo.p3.title"></h3>
+                <p class="shot-desc" data-i18n="demo.p3.desc"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ I18N ============================ -->
+    <section class="section" id="languages">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow"><span class="dot" aria-hidden="true"></span><span data-i18n="lang.eyebrow"></span></p>
+          <h2 class="section-title" data-i18n="lang.title"></h2>
+          <p class="section-sub" data-i18n="lang.subtitle"></p>
+        </div>
+
+        <div class="lang-cards">
+          <article class="lang-card reveal">
+            <header class="lang-card-head">
+              <span class="lang-token" aria-hidden="true">中</span>
+              <span class="lang-name" lang="zh-CN">简体中文</span>
+              <span class="lang-code">zh-CN</span>
+            </header>
+            <p class="lang-card-desc" data-i18n="lang.c1"></p>
+            <div class="lang-sample" lang="zh-CN" aria-hidden="true">
+              <span class="ls-row"><i>文件</i><b>⌘ S</b></span>
+              <span class="ls-row"><i>预览</i><b>⌘ P</b></span>
+            </div>
+          </article>
+
+          <article class="lang-card reveal">
+            <header class="lang-card-head">
+              <span class="lang-token" aria-hidden="true">A</span>
+              <span class="lang-name" lang="en">English</span>
+              <span class="lang-code">en</span>
+            </header>
+            <p class="lang-card-desc" data-i18n="lang.c2"></p>
+            <div class="lang-sample" aria-hidden="true">
+              <span class="ls-row"><i>File</i><b>⌘ S</b></span>
+              <span class="ls-row"><i>Preview</i><b>⌘ P</b></span>
+            </div>
+          </article>
+
+          <article class="lang-card reveal">
+            <header class="lang-card-head">
+              <span class="lang-token" aria-hidden="true">あ</span>
+              <span class="lang-name" lang="ja">日本語</span>
+              <span class="lang-code">ja</span>
+            </header>
+            <p class="lang-card-desc" data-i18n="lang.c3"></p>
+            <div class="lang-sample" aria-hidden="true">
+              <span class="ls-row"><i>ファイル</i><b>⌘ S</b></span>
+              <span class="ls-row"><i>プレビュー</i><b>⌘ P</b></span>
+            </div>
+          </article>
+        </div>
+
+        <p class="lang-note reveal" data-i18n="lang.note"></p>
+      </div>
+    </section>
+
+    <!-- ============================ DOWNLOAD ============================ -->
+    <section class="section section--alt" id="download">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow"><span class="dot" aria-hidden="true"></span><span data-i18n="dl.eyebrow"></span></p>
+          <h2 class="section-title" data-i18n="dl.title"></h2>
+          <p class="section-sub" data-i18n="dl.subtitle"></p>
+        </div>
+
+        <div class="dl-grid">
+          <article class="dl-card reveal">
+            <span class="dl-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M3 5.2 10.4 4.2v7.1H3V5.2Zm0 13.6 7.4 1v-7H3v6Zm9.1 1.2L21 21.6V12.3h-8.9v7.7Zm0-15.9V11.3H21V2.4L12.1 4.1Z" />
+              </svg>
+            </span>
+            <h3 class="dl-name">Windows <span class="dl-tag">Lite</span></h3>
+            <p class="dl-arch" data-i18n="dl.win.arch"></p>
+            <p class="dl-file">FoxText-2.6.0-lite-win-x64.exe <span class="dl-size">12.0 MB</span></p>
+            <a class="btn btn-primary dl-btn" href="/download/FoxText-2.6.0-lite-win-x64.exe" download data-i18n-aria="dl.win.aria">
+              <span data-i18n="dl.btn"></span>
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M12 4v10m0 0 3.6-3.6M12 14 8.4 10.4M5 18h14" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </a>
+
+            <!-- system requirements: small print under the CTA, never louder
+                 than the download button itself -->
+            <div class="dl-req">
+              <p class="dl-req-title" data-i18n="dl.reqTitle"></p>
+              <ul class="dl-req-list">
+                <li data-i18n="dl.reqOs"></li>
+                <li>
+                  <span data-i18n="dl.reqWebView2"></span>
+                  <a class="dl-req-link" href="https://go.microsoft.com/fwlink/p/?LinkId=2124703"
+                     target="_blank" rel="noopener noreferrer"
+                     data-i18n="dl.reqWebView2Link"></a>
+                </li>
+              </ul>
+              <p class="dl-req-note" data-i18n="dl.reqPortable"></p>
+            </div>
+          </article>
+
+          <article class="dl-card reveal">
+            <span class="dl-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M16.4 12.7c0-2.2 1.8-3.2 1.9-3.3-1-1.5-2.6-1.7-3.2-1.7-1.4-.1-2.7.8-3.4.8-.7 0-1.8-.8-3-.8-1.5 0-2.9.9-3.7 2.3-1.6 2.7-.4 6.8 1.1 9 .8 1.1 1.7 2.3 2.9 2.3 1.2 0 1.6-.7 3.1-.7 1.4 0 1.8.7 3 .7 1.3 0 2.1-1.1 2.8-2.2.9-1.3 1.3-2.5 1.3-2.6-.1 0-2.8-1.1-2.8-3.8ZM14.2 6.1c.6-.8 1.1-1.9 1-3-1 0-2.1.7-2.8 1.5-.6.7-1.1 1.8-1 2.9 1.1.1 2.2-.6 2.8-1.4Z" />
+              </svg>
+            </span>
+            <h3 class="dl-name">macOS</h3>
+            <p class="dl-arch" data-i18n="dl.mac.arch"></p>
+            <p class="dl-file">FoxText-2.6.0-universal.dmg <span class="dl-size" data-i18n="dl.soonSize"></span></p>
+            <a class="btn btn-outline dl-btn is-disabled" href="#" aria-disabled="true" data-i18n-aria="dl.mac.aria">
+              <span data-i18n="dl.soon"></span>
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M12 4v10m0 0 3.6-3.6M12 14 8.4 10.4M5 18h14" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </a>
+          </article>
+
+          <article class="dl-card reveal">
+            <span class="dl-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <rect x="3.2" y="4.6" width="17.6" height="14.8" rx="2.2" stroke="currentColor" stroke-width="1.6" />
+                <path d="M7.4 10.2 9.8 12l-2.4 1.8M12.6 14.2h4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </span>
+            <h3 class="dl-name">Linux</h3>
+            <p class="dl-arch" data-i18n="dl.linux.arch"></p>
+            <p class="dl-file">FoxText-2.6.0-x86_64.AppImage <span class="dl-size" data-i18n="dl.soonSize"></span></p>
+            <a class="btn btn-outline dl-btn is-disabled" href="#" aria-disabled="true" data-i18n-aria="dl.linux.aria">
+              <span data-i18n="dl.soon"></span>
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M12 4v10m0 0 3.6-3.6M12 14 8.4 10.4M5 18h14" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </a>
+          </article>
+        </div>
+
+        <div class="pkg reveal">
+          <p class="pkg-title" data-i18n="dl.pkgTitle"></p>
+          <div class="pkg-list">
+            <div class="pkg-row">
+              <span class="pkg-os">macOS</span>
+              <code>brew install --cask foxtext</code>
+              <button class="copy-btn" type="button" data-copy="brew install --cask foxtext" data-i18n-aria="dl.copy">
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <rect x="9" y="9" width="11" height="11" rx="2" stroke="currentColor" stroke-width="1.6" />
+                  <path d="M15 6.5V5.5A1.5 1.5 0 0 0 13.5 4H5.5A1.5 1.5 0 0 0 4 5.5v8A1.5 1.5 0 0 0 5.5 15h1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+                </svg>
+              </button>
+            </div>
+            <div class="pkg-row">
+              <span class="pkg-os">Windows</span>
+              <code>winget install FoxText</code>
+              <button class="copy-btn" type="button" data-copy="winget install FoxText" data-i18n-aria="dl.copy">
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <rect x="9" y="9" width="11" height="11" rx="2" stroke="currentColor" stroke-width="1.6" />
+                  <path d="M15 6.5V5.5A1.5 1.5 0 0 0 13.5 4H5.5A1.5 1.5 0 0 0 4 5.5v8A1.5 1.5 0 0 0 5.5 15h1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+                </svg>
+              </button>
+            </div>
+            <div class="pkg-row">
+              <span class="pkg-os">Linux</span>
+              <code>sudo apt install foxtext</code>
+              <button class="copy-btn" type="button" data-copy="sudo apt install foxtext" data-i18n-aria="dl.copy">
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <rect x="9" y="9" width="11" height="11" rx="2" stroke="currentColor" stroke-width="1.6" />
+                  <path d="M15 6.5V5.5A1.5 1.5 0 0 0 13.5 4H5.5A1.5 1.5 0 0 0 4 5.5v8A1.5 1.5 0 0 0 5.5 15h1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ OPEN SOURCE ============================ -->
+    <section class="section" id="opensource">
+      <div class="container oss-wrap">
+        <div class="oss-copy reveal">
+          <p class="eyebrow"><span class="dot" aria-hidden="true"></span><span data-i18n="oss.eyebrow"></span></p>
+          <h2 class="section-title" data-i18n="oss.title"></h2>
+          <p class="section-sub" data-i18n="oss.desc"></p>
+
+          <ul class="oss-points">
+            <li><span class="oss-dash" aria-hidden="true"></span><span data-i18n="oss.p1"></span></li>
+            <li><span class="oss-dash" aria-hidden="true"></span><span data-i18n="oss.p2"></span></li>
+            <li><span class="oss-dash" aria-hidden="true"></span><span data-i18n="oss.p3"></span></li>
+          </ul>
+
+          <div class="oss-actions">
+            <a class="btn btn-ghost" href="https://github.com/foxtext/foxtext" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M12 2.2a9.8 9.8 0 0 0-3.1 19.1c.5.1.7-.2.7-.5v-1.9c-2.7.6-3.3-1.2-3.3-1.2-.4-1.1-1.1-1.4-1.1-1.4-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.3 1.1 2.9.8.1-.6.3-1.1.6-1.3-2.2-.2-4.4-1.1-4.4-4.8 0-1.1.4-1.9 1-2.6-.1-.3-.4-1.3.1-2.6 0 0 .8-.3 2.7 1a9.2 9.2 0 0 1 4.9 0c1.9-1.3 2.7-1 2.7-1 .5 1.3.2 2.3.1 2.6.6.7 1 1.5 1 2.6 0 3.7-2.3 4.5-4.4 4.8.4.3.7 1 .7 2v2.9c0 .3.2.6.7.5A9.8 9.8 0 0 0 12 2.2Z" />
+              </svg>
+              <span data-i18n="oss.repo"></span>
+            </a>
+            <a class="btn btn-outline" href="https://github.com/foxtext/foxtext/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener" data-i18n="oss.contributing"></a>
+          </div>
+        </div>
+
+        <div class="oss-code reveal">
+          <div class="code-card">
+            <div class="code-card-head">
+              <span class="code-lang">bash</span>
+              <button class="copy-btn" type="button"
+                      data-copy="git clone https://github.com/foxtext/foxtext.git
+cd foxtext
+pnpm install
+pnpm dev" data-i18n-aria="oss.copy">
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <rect x="9" y="9" width="11" height="11" rx="2" stroke="currentColor" stroke-width="1.6" />
+                  <path d="M15 6.5V5.5A1.5 1.5 0 0 0 13.5 4H5.5A1.5 1.5 0 0 0 4 5.5v8A1.5 1.5 0 0 0 5.5 15h1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+                </svg>
+              </button>
+            </div>
+            <pre class="code-card-body"><code><span class="c-comment"># clone &amp; build</span>
+git clone https://github.com/foxtext/foxtext.git
+<span class="c-kw">cd</span> foxtext
+pnpm install
+pnpm dev</code></pre>
+          </div>
+          <p class="license-line">
+            <span class="license-badge">MIT</span>
+            <span data-i18n="oss.license"></span>
+          </p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============================ FOOTER ============================ -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <a class="brand" href="#top" aria-label="FoxText">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M4.6 3.4 9 7.9h6l4.4-4.5v8.1A7.4 7.4 0 0 1 12 21a7.4 7.4 0 0 1-7.4-9.5V3.4Z"
+                    stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" />
+              <circle cx="9.6" cy="12" r="1.15" fill="currentColor" />
+              <circle cx="14.4" cy="12" r="1.15" fill="currentColor" />
+              <path d="M12 15.1v1.7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+            </svg>
+          </span>
+          <span class="brand-name">FoxText</span>
+        </a>
+        <p class="footer-tagline" data-i18n="footer.tagline"></p>
+      </div>
+
+      <nav class="footer-cols" aria-label="Footer">
+        <div class="footer-col">
+          <p class="footer-col-title" data-i18n="footer.col1"></p>
+          <a href="#features" data-i18n="footer.p1"></a>
+          <a href="#download" data-i18n="footer.p2"></a>
+          <a href="#screenshots" data-i18n="footer.p3"></a>
+          <a href="#download" data-i18n="footer.p4"></a>
+        </div>
+        <div class="footer-col">
+          <p class="footer-col-title" data-i18n="footer.col2"></p>
+          <a href="#opensource" data-i18n="footer.r1"></a>
+          <a href="#features" data-i18n="footer.r2"></a>
+          <a href="#features" data-i18n="footer.r3"></a>
+          <a href="#opensource" data-i18n="footer.r4"></a>
+        </div>
+        <div class="footer-col">
+          <p class="footer-col-title" data-i18n="footer.col3"></p>
+          <a href="https://github.com/foxtext/foxtext" target="_blank" rel="noopener" data-i18n="footer.c1"></a>
+          <a href="https://github.com/foxtext/foxtext/discussions" target="_blank" rel="noopener" data-i18n="footer.c2"></a>
+          <a href="https://github.com/foxtext/foxtext/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener" data-i18n="footer.c3"></a>
+          <a href="https://github.com/foxtext/foxtext/blob/main/CODE_OF_CONDUCT.md" target="_blank" rel="noopener" data-i18n="footer.c4"></a>
+        </div>
+        <div class="footer-col">
+          <p class="footer-col-title" data-i18n="footer.col4"></p>
+          <a href="#" data-i18n="footer.g1"></a>
+          <a href="#" data-i18n="footer.g2"></a>
+          <a href="#opensource" data-i18n="footer.g3"></a>
+          <a href="#" data-i18n="footer.g4"></a>
+        </div>
+      </nav>
+    </div>
+
+    <div class="container footer-bottom">
+      <p class="footer-copy" data-i18n="footer.copyright"></p>
+      <p class="footer-demo" data-i18n="footer.demo"></p>
+    </div>
+  </footer>
+
+  <button class="to-top" id="toTop" type="button" hidden data-i18n-aria="misc.toTop" aria-label="Back to top">
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M12 19V6m0 0 5.5 5.5M12 6 6.5 11.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+    </svg>
+  </button>
+
+  <div class="toast" id="toast" role="status" aria-live="polite">
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M5 12.6 9.6 17 19 7.4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+    </svg>
+    <span id="toastText"></span>
+  </div>
+
+  <script src="assets/js/i18n.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

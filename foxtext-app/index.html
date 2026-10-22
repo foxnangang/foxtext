@@ -54,6 +54,20 @@
     <div class="mb-drop" id="mbDrop" role="menu" hidden></div>
   </div>
 
+  <!-- =========================== update banner ===========================
+       Shown only when the host reports a newer release via `foxtext:update`
+       (Lite's host fetches version.json; a browser has no bridge and Electron
+       simply never fires the event, so the bar stays hidden there). -->
+  <div class="update-bar" id="updateBar" role="status" hidden>
+    <span class="update-text" id="updateText"></span>
+    <button type="button" class="update-action" id="updateAction"></button>
+    <button type="button" class="update-close" id="updateClose" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+    </button>
+  </div>
+
   <!-- ============================== top bar ============================== -->
   <header class="topbar">
     <div class="tb-brand">

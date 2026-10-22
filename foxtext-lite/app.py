@@ -22,12 +22,13 @@ import posixpath
 import socket
 import sys
 import threading
+import time
 import urllib.parse
 import webbrowser
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
-APP_VERSION = "2.6.0"
+APP_VERSION = "2.7.0"
 MAX_FILE_BYTES = 8 * 1024 * 1024
 
 # Lowest Windows build we support: 10.0.17763 == Windows 10 1809, the first
@@ -45,6 +46,27 @@ WEBVIEW2_CLIENT_GUID = "{F3017226-FE2A-4295-8BDF-00C3A9A7E4C5}"
 # cannot reach the network (index.html sets `connect-src 'none'`), so the host
 # sends it. Only id / version / OS / language / event kind are transmitted.
 BEACON_URL = "https://text.foxnan.com/api/beat.php"
+
+# Update check (2.7.0). The renderer cannot fetch this itself (its CSP is
+# `connect-src 'none'`), so the host does it and notifies the page via the
+# `foxtext:update` DOM event. Override the endpoint with FOXTEXT_UPDATE_URL
+# for testing. Never fatal: any failure is swallowed and simply means
+# "no update bar today".
+UPDATE_URL = os.environ.get(
+    "FOXTEXT_UPDATE_URL", "https://text.foxnan.com/version.json"
+)
+UPDATE_TIMEOUT = 4  # seconds; small on purpose — this must never delay startup
+UPDATE_CHECK_DELAY = 3  # seconds after `loaded`; let the renderer boot first
+
+
+def _semver_tuple(value) -> tuple:
+    """'2.7.0' -> (2, 7, 0); anything unparseable becomes (0, 0, 0) so a
+    malformed version string can never look newer than the running build."""
+    try:
+        parts = str(value).strip().lstrip("vV").split(".")
+        return tuple(int(p) for p in parts[:3]) if len(parts) >= 2 else (0, 0, 0)
+    except (TypeError, ValueError):
+        return (0, 0, 0)
 BEACON_TIMEOUT = 4.0
 
 
@@ -320,6 +342,24 @@ class FoxTextApi:
     def setLang(self, lang=None):
         # pywebview exposes no native menu bar, nothing to rebuild here.
         return APP_VERSION
+
+    def open_external(self, url=None):
+        """Open a URL in the user's default browser (update bar uses this).
+
+        Only http/https is accepted — a compromised renderer must not be able
+        to make the host open arbitrary schemes (file:, ms-settings:, ...).
+        Returns True when the URL was handed to the OS, False otherwise.
+        """
+        if not isinstance(url, str):
+            return False
+        parsed = urllib.parse.urlparse(url)
+        if parsed.scheme not in ("http", "https") or not parsed.netloc:
+            return False
+        try:
+            webbrowser.open(url)
+            return True
+        except Exception:
+            return False
 
     def beat(self, payload=None):
         """Anonymous launch beacon.
@@ -648,6 +688,39 @@ def main() -> None:
         )
 
     window.events.loaded += on_loaded
+
+    # Update check (2.7.0): fetch version.json in a daemon thread and, if
+    # a newer build exists, notify the renderer via `foxtext:update`. The
+    # renderer decides how to present it; a browser host simply never
+    # fires this event, so the bar stays hidden there.
+    def check_update():
+        try:
+            time.sleep(UPDATE_CHECK_DELAY)
+            request = urllib.request.Request(
+                UPDATE_URL, headers={"Accept": "application/json"}
+            )
+            with urllib.request.urlopen(request, timeout=UPDATE_TIMEOUT) as resp:
+                payload = json.loads(resp.read().decode("utf-8"))
+            remote = payload.get("version")
+            if _semver_tuple(remote) <= _semver_tuple(APP_VERSION):
+                return
+            target = payload.get("url") or (
+                "https://github.com/foxnangang/foxtext/releases/latest"
+            )
+            if not (
+                isinstance(target, str)
+                and urllib.parse.urlparse(target).scheme in ("http", "https")
+            ):
+                return
+            detail = json.dumps({"version": str(remote), "url": target})
+            window.evaluate_js(
+                "window.dispatchEvent(new CustomEvent('foxtext:update',"
+                f" {{ detail: {detail} }}));"
+            )
+        except Exception:
+            return  # offline, malformed JSON, window already gone — stay quiet
+
+    threading.Thread(target=check_update, daemon=True).start()
 
     try:
         webview.start(private_mode=False)

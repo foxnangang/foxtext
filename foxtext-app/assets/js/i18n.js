@@ -99,6 +99,9 @@
       'about.title': '关于 FoxText',
       'about.body': 'FoxText 是一个本地优先的 Markdown 编辑器：零依赖渲染、离线可用、你的文字只留在你的设备上。',
       'about.ok': '好',
+      'update.text': '新版本 {v} 已发布，点击即可下载',
+      'update.action': '前往下载',
+      'update.close': '关闭',
 
       'menu.aria': '应用菜单',
       'menu.file': '文件',
@@ -280,6 +283,9 @@
       'about.title': 'About FoxText',
       'about.body': 'FoxText is a local-first Markdown editor: dependency-free rendering, fully offline, your words never leave your device.',
       'about.ok': 'OK',
+      'update.text': 'Version {v} is available — click to download',
+      'update.action': 'Get it now',
+      'update.close': 'Dismiss',
 
       'menu.aria': 'Application menu',
       'menu.file': 'File',
@@ -461,6 +467,9 @@
       'about.title': 'FoxText について',
       'about.body': 'FoxText はローカルファーストの Markdown エディタです。依存なしのレンダリング、オフラインで動作し、文章は端末の外に出ません。',
       'about.ok': 'OK',
+      'update.text': '新しいバージョン {v} がリリースされました。クリックしてダウンロード',
+      'update.action': 'ダウンロード',
+      'update.close': '閉じる',
 
       'menu.aria': 'アプリケーションメニュー',
       'menu.file': 'ファイル',

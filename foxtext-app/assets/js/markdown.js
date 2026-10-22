@@ -1,5 +1,5 @@
 /* =============================================================================
- * FoxText — markdown.js  (v2.6.0)
+ * FoxText — markdown.js  (v2.7.0)
  * -----------------------------------------------------------------------------
  * A dependency-free Markdown engine (block parser + inline parser + sanitizer).
  * No CDN, no npm packages, no DOM access: safe to run in a browser <script>,
@@ -35,7 +35,7 @@
 })(typeof globalThis !== 'undefined' ? globalThis : this, function () {
   'use strict';
 
-  var VERSION = '2.6.0';
+  var VERSION = '2.7.0';
 
   /* --------------------------------------------------------------------- */
   /* Escaping helpers                                                      */

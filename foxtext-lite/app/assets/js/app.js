@@ -22,7 +22,8 @@
     sidebar: 'foxtext-sidebar',
     draft: 'foxtext-draft',
     anon: 'foxtext-anon',
-    stats: 'foxtext-stats'
+    stats: 'foxtext-stats',
+    updateDismissed: 'foxtext-update-dismissed'
   };
 
   /* Anonymous usage beacon — see sendStats() below. */
@@ -1815,6 +1816,10 @@
     els.miStats = byId('miStats');
     els.miVersion = byId('miVersion');
     els.menubar = byId('menubar');
+    els.updateBar = byId('updateBar');
+    els.updateText = byId('updateText');
+    els.updateAction = byId('updateAction');
+    els.updateClose = byId('updateClose');
     els.mbScroll = byId('mbScroll');
     els.mbDrop = byId('mbDrop');
     els.aboutModal = byId('aboutModal');
@@ -2056,6 +2061,59 @@
       else if (command === 'toggle-theme') toggleTheme();
       else if (command === 'toggle-sidebar') applySidebar(!state.sidebarOpen);
     });
+
+    /* Update bar (2.7.0). The HOST does the network check (the renderer's CSP
+       forbids requests) and dispatches `foxtext:update` with
+       {version, url}. A browser has no bridge, Electron simply never fires
+       the event — so in practice only Lite shows the bar. Dismissals are
+       remembered per version so the bar does not nag every launch. */
+    window.addEventListener('foxtext:update', function (event) {
+      var detail = event.detail || {};
+      var version = String(detail.version || '');
+      var url = String(detail.url || '');
+      if (!version || !url) return;
+      if (readLS(LS.updateDismissed, '') === version) return;
+      showUpdateBar(version, url);
+    });
+  }
+
+  /* --- update banner --------------------------------------------------- */
+
+  function showUpdateBar(version, url) {
+    if (!els.updateBar) return;
+    els.updateBar.dataset.url = url;
+    els.updateBar.dataset.versionHint = version;
+    els.updateText.textContent = t('update.text', { v: version });
+    els.updateAction.textContent = t('update.action');
+    els.updateBar.hidden = false;
+  }
+
+  function closeUpdateBar(remember) {
+    if (!els.updateBar) return;
+    els.updateBar.hidden = true;
+    if (remember) {
+      /* keep the dismissed version around; a newer one re-shows the bar */
+      writeLS(LS.updateDismissed, els.updateBar.dataset.versionHint || '');
+    }
+  }
+
+  function bindUpdateBar() {
+    if (!els.updateBar) return;
+    els.updateAction.addEventListener('click', function () {
+      var url = els.updateBar.dataset.url || '';
+      /* Lite hands the URL to the OS default browser; a browser host opens a
+         new tab; Electron never shows this bar */
+      if (window.foxtext && typeof window.foxtext.openExternal === 'function') {
+        try { window.foxtext.openExternal(url); } catch (err) { /* stay put */ }
+      } else {
+        window.open(url, '_blank', 'noopener');
+      }
+    });
+    els.updateClose.addEventListener('click', function () {
+      closeUpdateBar(true);
+    });
+    /* remember which version the user dismissed (shown-version hint set in
+       showUpdateBar via dataset) */
   }
 
   function initAppearance() {
@@ -2108,6 +2166,7 @@
     renderNow();
     initResizer();
     bindEvents();
+    bindUpdateBar();
 
     if (draft) showDraftBanner(draft);
 

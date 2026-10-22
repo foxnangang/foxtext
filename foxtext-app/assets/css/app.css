@@ -382,6 +382,78 @@ button {
   font-variant-numeric: tabular-nums;
 }
 
+/* ------------------------------ update bar ------------------------------- */
+/*
+ * Slim banner between the menu bar and the top bar, shown only when the host
+ * reports a newer release (`foxtext:update` event — Lite's host does the
+ * network check; browsers and Electron never fire it). Uses the same surface
+ * colour as .topbar with an accent left edge so it reads as a notification,
+ * not chrome.
+ */
+.update-bar {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 14px;
+  background: var(--bg-2);
+  border-bottom: 1px solid var(--line);
+  border-left: 3px solid var(--accent);
+  font-size: 12.5px;
+  color: var(--text-2);
+}
+
+.update-bar[hidden] {
+  display: none; /* belt and braces against global [hidden] quirks */
+}
+
+.update-text {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.update-action {
+  flex: 0 0 auto;
+  padding: 3px 10px;
+  border: 1px solid var(--accent);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--accent);
+  font: inherit;
+  cursor: pointer;
+}
+
+.update-action:hover {
+  background: var(--accent);
+  color: var(--bg-1);
+}
+
+.update-close {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--text-3);
+  cursor: pointer;
+}
+
+.update-close:hover {
+  color: var(--text-1);
+}
+
+.update-close svg {
+  width: 13px;
+  height: 13px;
+}
+
 /* ------------------------------- menu bar -------------------------------- */
 /*
  * Drawn by the renderer only on hosts without a native menu bar (FoxText

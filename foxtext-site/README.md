@@ -114,7 +114,7 @@ scp -r index.html assets/ user@your-server:/var/www/text.example.com/
 ### 下载区
 
 Windows 卡片指向服务器上的真实安装包
-`/download/FoxText-2.6.0-lite-win-x64.exe`（12.0 MB，免安装，复用系统 WebView2）。
+`/download/FoxText-2.7.0-lite-win-x64.exe`（12.0 MB，免安装，复用系统 WebView2）。
 macOS / Linux 尚未出包，按钮置灰并标注「即将推出」。
 
 ### 运营数据后台

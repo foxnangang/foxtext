@@ -1,7 +1,7 @@
 {
   "name": "foxtext",
   "productName": "FoxText",
-  "version": "2.6.0",
+  "version": "2.7.0",
   "description": "A local-first, zero-dependency Markdown editor with a hand-written renderer.",
   "main": "electron/main.js",
   "private": true,
